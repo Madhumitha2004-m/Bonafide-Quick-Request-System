@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bonafide Requests - HOD</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>HOD Dashboard</h2>
+    <div id="requests"></div>
+  </div>
+  <script>
+    const data = JSON.parse(localStorage.getItem("requests") || "[]");
+    const container = document.getElementById("requests");
+
+    if (data.length === 0) {
+      container.innerHTML = "<p>No requests yet.</p>";
+    } else {
+      data.forEach((req, index) => {
+        container.innerHTML += `
+          <div style="border:1px solid #ccc; padding:10px; margin-bottom:10px;">
+            <strong>Name:</strong> ${req.name}<br>
+            <strong>Reg No:</strong> ${req.reg}<br>
+            <strong>Purpose:</strong> ${req.purpose}<br>
+            <strong>Status:</strong> ${req.status}<br>
+            ${req.status === 'Pending' ? `
+              <button onclick="updateStatus(${index}, 'Approved')">Approve</button>
+              <button onclick="updateStatus(${index}, 'Rejected')">Reject</button>
+            ` : ''}
+          </div>
+        `;
+      });
+    }
+
+    function updateStatus(i, newStatus) {
+      data[i].status = newStatus;
+      localStorage.setItem("requests", JSON.stringify(data));
+      location.reload();
+    }
+  </script>
+</body>
+</html>
